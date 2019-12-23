@@ -1,5 +1,6 @@
 class BooksController < ApplicationController
-
+  before_action :authenticate_user!
+  before_action :new_book, only: [:show, :index]
   def show
   	@book = Book.find(params[:id])
   end
@@ -9,17 +10,22 @@ class BooksController < ApplicationController
   end
 
   def create
-  	@book = Book.new(book_params) #Bookモデルのテーブルを使用しているのでbookコントローラで保存する。
-  	if @book.save #入力されたデータをdbに保存する。
-  		redirect_to @book, notice: "successfully created book!"#保存された場合の移動先を指定。
+    @new_book = Book.new(book_params)
+    @new_book.user_id = current_user.id
+  	if @new_book.save #入力されたデータをdbに保存する。
+  		redirect_to @new_book, notice: "successfully created book!"#保存された場合の移動先を指定。
   	else
   		@books = Book.all
+      flash[:danger] = @new_book.errors.full_messages
   		render 'index'
   	end
   end
 
   def edit
   	@book = Book.find(params[:id])
+      if current_user.id != @book.user_id
+      redirect_to books_path
+      end
   end
 
 
@@ -33,16 +39,19 @@ class BooksController < ApplicationController
   	end
   end
 
-  def delete
+  def destroy
   	@book = Book.find(params[:id])
-  	@book.destoy
+  	@book.destroy
   	redirect_to books_path, notice: "successfully delete book!"
   end
 
   private
 
   def book_params
-  	params.require(:book).permit(:title)
+  	params.require(:book).permit(:title,:body)
   end
 
+  def new_book
+    @new_book = Book.new
+  end
 end
