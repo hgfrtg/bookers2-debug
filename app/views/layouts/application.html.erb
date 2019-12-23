@@ -11,7 +11,7 @@
 
   <body>
     <!--ヘッダーの記述-->
-    <<header class="navbar navbar-fixed-top navbar-inverse">
+    <header class="navbar navbar-fixed-top navbar-inverse">
       <div class="container">
 
         <nav class="nav navbar-nav navbar-left">
@@ -28,7 +28,7 @@
                 <% else %>
                 <li><%= link_to 'Home', root_path, class: "home glyphicon glyphicon-home" %></li>
                 <li><%= link_to 'About', home_about_path, class: "about glyphicon glyphicon-link" %></li>
-                <li><%= link_to "Signup",new_user_registration_path, class: "sign_up glyphicon glyphicon-edit" %></li>
+                <li><%= link_to "Sign up",new_user_registration_path, class: "sign_up glyphicon glyphicon-edit" %></li>
                 <li><%= link_to 'Login', new_user_session_path, class: "sign_in glyphicon glyphicon-log-in" %></li>
             <% end %>
           </ul>

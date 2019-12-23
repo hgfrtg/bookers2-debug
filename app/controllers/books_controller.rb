@@ -16,12 +16,16 @@ class BooksController < ApplicationController
   		redirect_to @new_book, notice: "successfully created book!"#保存された場合の移動先を指定。
   	else
   		@books = Book.all
+      flash[:danger] = @new_book.errors.full_messages
   		render 'index'
   	end
   end
 
   def edit
   	@book = Book.find(params[:id])
+      if current_user.id != @book.user_id
+      redirect_to books_path
+      end
   end
 
 
@@ -35,9 +39,9 @@ class BooksController < ApplicationController
   	end
   end
 
-  def delete
+  def destroy
   	@book = Book.find(params[:id])
-  	@book.destoy
+  	@book.destroy
   	redirect_to books_path, notice: "successfully delete book!"
   end
 
